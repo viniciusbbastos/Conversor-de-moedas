@@ -48,10 +48,29 @@ public class Registro {
         List<String> lista = new ArrayList<>();
         lista.add("usd");
         lista.add("brl");
-        lista.add("euro");
-        lista.add("argentino");
+        lista.add("eur");
+        lista.add("ars");
         lista.add("gbp");
         lista.add("rub");
         return lista;
+    }
+
+    public double getListaVal(int num) {
+        switch (num) {
+            case 0:
+                return getDolar();
+            case 1:
+                return getReal();
+            case 2:
+                return getEuro();
+            case 3:
+                return getPesoArgentino();
+            case 4:
+                return getLibra();
+            case 5:
+                return getRublo();
+            default:
+                return 0.0;
+        }
     }
 }

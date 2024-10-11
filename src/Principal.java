@@ -1,3 +1,5 @@
+import br.com.alura.conversordemoedas.calculos.Conversor;
+import br.com.alura.conversordemoedas.modelos.Menu;
 import br.com.alura.conversordemoedas.modelos.Registro;
 import br.com.alura.conversordemoedas.modelos.MoedasExchageRate;
 import com.google.gson.*;
@@ -10,6 +12,7 @@ import java.net.http.HttpResponse;
 
 public class Principal {
     public static void main(String[] args) throws IOException, InterruptedException {
+
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -19,7 +22,7 @@ public class Principal {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
         String json = response.body();
-        System.out.println(json);
+       // System.out.println(json);
 
         Gson gson = new GsonBuilder()
                 //.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -28,7 +31,19 @@ public class Principal {
         JsonObject cambio = jsonObject.getAsJsonObject("conversion_rates");
 
         MoedasExchageRate moedasExchageRate = gson.fromJson(cambio, MoedasExchageRate.class);
-        Registro moeda = new Registro(moedasExchageRate);
-        System.out.println(moeda.getDolar());
+        Registro registro = new Registro(moedasExchageRate);
+        Conversor conversor = new Conversor(registro);
+        Menu menu = new Menu();
+
+        String[] resposta = new String[2];
+        do {
+            menu.mostrarMenu();
+            resposta = menu.escolha();
+            if (!resposta[0].equals("exit")) {
+                double valor = menu.perguntaValor();
+                System.out.println(conversor.converte(resposta, valor));
+            }
+        } while (!resposta[0].equals("exit"));
+        System.out.println("Obrigado!");
     }
 }
